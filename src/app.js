@@ -46,12 +46,13 @@ const vietnamDate = new Intl.DateTimeFormat("en-GB", {
   year: "numeric",
 }).format(new Date());
 
-const defaultTitle = "Chà Bông\nSpace";
+const defaultTitle = "Music Title";
 
 titleInput.value = defaultTitle;
 subtitleInput.value = vietnamDate;
 
 const paperTextures = [
+  { id: "cold-pressed-arctic", name: "cold pressed arctic", path: "materials/paper-textures/cold-pressed-arctic.jpeg" },
   { id: "cold-pressed-off-white", name: "cold pressed off white", path: "materials/paper-textures/cold-pressed-off-white.jpeg" },
   { id: "handmade-cotton-paper", name: "handmade cotton", path: "materials/paper-textures/handmade-cotton-paper.jpeg" },
   { id: "linen-finish-ivory", name: "linen ivory", path: "materials/paper-textures/linen-finish-ivory.jpeg" },
@@ -126,7 +127,7 @@ const state = {
   lastNotes: ["--", "--"],
   volume: 0,
   started: false,
-  paperId: "cold-pressed-off-white",
+  paperId: "cold-pressed-arctic",
   paperImage: null,
   importedPaper: null,
   noteDetected: false,
@@ -1215,13 +1216,10 @@ function composeRecordingFrame() {
   recordCtx.shadowOffsetY = 0;
   recordCtx.fillStyle = "rgba(31, 30, 27, 0.82)";
   recordCtx.font = "24px Georgia, serif";
-  const titleLines = (titleInput.value || defaultTitle).split("\n").slice(0, 2);
-  titleLines.forEach((line, index) => {
-    recordCtx.fillText(line, 38, 52 + index * 28);
-  });
+  recordCtx.fillText(titleInput.value || defaultTitle, 38, 52);
   recordCtx.fillStyle = "rgba(31, 30, 27, 0.46)";
   recordCtx.font = "13px ui-monospace, Menlo, monospace";
-  recordCtx.fillText(subtitleInput.value || vietnamDate, 38, 108);
+  recordCtx.fillText(subtitleInput.value || vietnamDate, 38, 78);
   recordCtx.restore();
 
   if (state.cameraStream && cameraPreview.videoWidth) {

@@ -135,11 +135,11 @@ button {
 }
 
 .brand-title-input {
-  height: 58px;
+  height: 31px;
   padding: 0 6px;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(18px, 1.65vw, 26px);
-  line-height: 1.08;
+  line-height: 1;
   overflow: hidden;
 }
 
