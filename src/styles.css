@@ -210,7 +210,7 @@ button {
   left: clamp(18px, 4vw, 46px);
   bottom: clamp(86px, 14vh, 150px);
   z-index: 7;
-  width: min(430px, calc(100% - 36px));
+  width: min(620px, calc(100% - 36px));
   padding: 0;
   transition:
     opacity 220ms ease,
@@ -226,12 +226,17 @@ button {
 }
 
 .permission-panel h1 {
+  display: grid;
   margin: 0;
   color: #24231f;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(54px, 8vw, 104px);
   line-height: 0.9;
   letter-spacing: 0;
+}
+
+.permission-panel h1 span {
+  white-space: nowrap;
 }
 
 .permission-panel p {
