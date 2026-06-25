@@ -128,7 +128,7 @@ const state = {
   lastNotes: ["--", "--"],
   volume: 0,
   started: false,
-  paperId: "cold-pressed-arctic",
+  paperId: "cold-pressed-off-white",
   paperImage: null,
   paperCanvas: null,
   paperCanvasSize: null,
@@ -1737,7 +1737,7 @@ function closePaperPanelOnOutsideClick(event) {
 }
 
 buildPaperPicker();
-loadPaperTexture(paperTextures[0]);
+loadPaperTexture(paperTextures.find((paper) => paper.id === state.paperId) || paperTextures[0]);
 startButton.addEventListener("click", startStudio);
 backButton.addEventListener("click", backToIntro);
 listenButton.addEventListener("click", toggleListen);
