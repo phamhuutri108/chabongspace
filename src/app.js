@@ -90,10 +90,11 @@ const PITCH_ANALYSIS_INTERVAL = 1000 / 40;
 const WAVEFORM_DRAW_INTERVAL = 1000 / 30;
 const RECORDING_FRAME_INTERVAL = 1000 / 30;
 const AUDIO_FFT_SIZE = 4096;
-const MAX_CANVAS_DPR = 1.5;
+const RUNNING_LOCALLY = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+const MAX_CANVAS_DPR = RUNNING_LOCALLY ? 1.5 : 1;
 const FLUID_TARGET_CELL_SIZE = 5.4;
 const FLUID_MIN_WIDTH = 96;
-const FLUID_MAX_WIDTH = 224;
+const FLUID_MAX_WIDTH = RUNNING_LOCALLY ? 224 : 188;
 const RECORDING_DB_NAME = "chabongspace-recordings";
 const RECORDING_DB_VERSION = 1;
 const RECORDING_STORE_NAME = "recordings";
@@ -129,6 +130,8 @@ const state = {
   started: false,
   paperId: "cold-pressed-arctic",
   paperImage: null,
+  paperCanvas: null,
+  paperCanvasSize: null,
   importedPaper: null,
   noteDetected: false,
   noteDetectedUntil: 0,
@@ -163,6 +166,8 @@ function resizeCanvas() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   recordCtx.setTransform(scale, 0, 0, scale, 0, 0);
   state.fluid = createFluidSimulation(rect.width, rect.height);
+  state.paperCanvas = null;
+  state.paperCanvasSize = null;
   state.lastDrop = null;
   state.recentPaintEvents = [];
   state.lastArtworkTime = 0;
@@ -181,14 +186,37 @@ function resizeWaveformCanvas() {
 function paintPaper(targetCtx, width, height, alpha = 1) {
   targetCtx.save();
   targetCtx.globalAlpha = alpha;
-  targetCtx.fillStyle = "#f8f6ef";
-  targetCtx.fillRect(0, 0, width, height);
 
   if (state.paperImage?.complete && state.paperImage.naturalWidth > 0) {
-    drawImageCover(targetCtx, state.paperImage, 0, 0, width, height);
+    const paper = getPaperCanvas(width, height);
+    targetCtx.drawImage(paper, 0, 0, width, height);
+  } else {
+    targetCtx.fillStyle = "#f8f6ef";
+    targetCtx.fillRect(0, 0, width, height);
   }
 
   targetCtx.restore();
+}
+
+function getPaperCanvas(width, height) {
+  if (
+    state.paperCanvas
+    && state.paperCanvasSize?.width === width
+    && state.paperCanvasSize?.height === height
+  ) {
+    return state.paperCanvas;
+  }
+
+  const paperCanvas = document.createElement("canvas");
+  paperCanvas.width = Math.max(1, Math.floor(width));
+  paperCanvas.height = Math.max(1, Math.floor(height));
+  const paperCtx = paperCanvas.getContext("2d", { alpha: false });
+  paperCtx.fillStyle = "#f8f6ef";
+  paperCtx.fillRect(0, 0, width, height);
+  drawImageCover(paperCtx, state.paperImage, 0, 0, width, height);
+  state.paperCanvas = paperCanvas;
+  state.paperCanvasSize = { width, height };
+  return paperCanvas;
 }
 
 function drawImageCover(targetCtx, image, x, y, width, height) {
@@ -1672,6 +1700,8 @@ function loadPaperTexture(paper) {
   image.onload = () => {
     state.paperId = paper.id;
     state.paperImage = image;
+    state.paperCanvas = null;
+    state.paperCanvasSize = null;
     updatePaperPicker();
     clearArtwork();
   };
