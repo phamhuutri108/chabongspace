@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cha Bong Space turns live guitar notes into a watercolor performance and records the session with camera."
+    />
+    <title>Cha Bong Space</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <button id="backButton" class="back-button" type="button" aria-label="Back to intro" title="Back">
+        <span aria-hidden="true">←</span>
+      </button>
+
+      <section class="studio" aria-label="Cha Bong Space studio">
+        <canvas id="stage" aria-label="Live watercolor sound canvas"></canvas>
+        <canvas id="recordingCanvas" aria-hidden="true"></canvas>
+
+        <div class="paper-grain" aria-hidden="true"></div>
+
+        <div class="brand-mark" aria-label="Editable title">
+          <input id="titleInput" class="brand-input brand-title-input" type="text" value="Untitled song" placeholder="Song title" aria-label="Song title" />
+          <input id="subtitleInput" class="brand-input brand-subtitle-input" type="text" placeholder="Date" aria-label="Performance date" />
+        </div>
+
+        <div class="camera-card" id="cameraCard">
+          <video id="cameraPreview" class="camera-preview" muted playsinline></video>
+          <div class="camera-caption">front camera</div>
+        </div>
+
+        <div id="permissionPanel" class="permission-panel">
+          <h1>Cha Bong Space</h1>
+          <p>
+            just for em Bông.
+          </p>
+          <button id="startButton" class="primary-action" type="button">
+            Start
+          </button>
+        </div>
+
+        <section id="recordingLibraryPanel" class="recording-library-panel" aria-label="Saved recordings">
+          <div class="recording-library-header">
+            <span>recorded videos</span>
+            <small id="recordingLibraryStatus">saved newest first</small>
+          </div>
+          <div id="recordingLibraryGrid" class="recording-library-grid"></div>
+        </section>
+
+        <aside class="toolbar" aria-label="Studio controls">
+          <button id="listenButton" class="control-button active" type="button">
+            Listen
+          </button>
+          <button id="cameraButton" class="control-button active" type="button">
+            Camera
+          </button>
+          <button id="recordButton" class="control-button record" type="button">
+            Record
+          </button>
+          <button id="clearButton" class="icon-button" type="button" aria-label="Clear canvas" title="Clear canvas">
+            Clear
+          </button>
+          <button id="paperToggleButton" class="control-button" type="button" aria-expanded="false" aria-controls="paperPanel">
+            Paper
+          </button>
+          <button id="hideUiButton" class="control-button hide-ui-button" type="button" aria-pressed="false">
+            Hide UI
+          </button>
+        </aside>
+
+        <section id="paperPanel" class="paper-panel" aria-label="Paper texture picker">
+          <div class="paper-panel-header">
+            <span>paper</span>
+            <button id="paperCloseButton" class="paper-close-button" type="button" aria-label="Close paper picker">
+              Close
+            </button>
+          </div>
+          <div id="paperGrid" class="paper-grid"></div>
+          <input id="paperImportInput" class="paper-import-input" type="file" accept="image/*" />
+        </section>
+
+        <div class="waveform-panel" aria-label="Detected note waveform">
+          <div class="waveform-notes" aria-label="Detected notes">
+            <strong id="primaryNoteReadout">--</strong>
+          </div>
+          <canvas id="waveformCanvas" class="waveform-display" aria-label="Detected note waveform"></canvas>
+        </div>
+
+        <section class="status-panel" aria-label="Audio status">
+          <div>
+            <span class="label">volume</span>
+            <meter id="volumeMeter" min="0" max="1" value="0"></meter>
+          </div>
+          <div>
+            <span class="label">recording</span>
+            <strong id="recordingReadout">ready</strong>
+          </div>
+        </section>
+
+        <section id="recordingPreviewPanel" class="recording-preview-panel" aria-label="Recorded video preview" aria-hidden="true">
+          <div class="recording-preview-card">
+            <div class="recording-preview-header">
+              <div>
+                <span>recorded video</span>
+                <small id="recordingPreviewStatus">saved locally</small>
+              </div>
+              <button id="recordingPreviewCloseButton" class="icon-button" type="button" aria-label="Close recording preview">
+                Close
+              </button>
+            </div>
+            <video id="recordingPreviewVideo" class="recording-preview-video" controls playsinline></video>
+            <div class="recording-preview-actions">
+              <button id="recordingDownloadButton" class="control-button" type="button">
+                Download .mov
+              </button>
+              <button id="recordingDeleteButton" class="control-button danger" type="button">
+                Delete
+              </button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

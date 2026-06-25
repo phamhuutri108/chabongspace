@@ -1,0 +1,17 @@
+{
+  "name": "chabongspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "verify": "node --check src/app.js"
+  },
+  "devDependencies": {
+    "vite": "^8.0.16"
+  },
+  "dependencies": {
+    "pitchy": "^4.1.0"
+  }
+}
