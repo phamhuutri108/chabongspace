@@ -46,6 +46,9 @@ const vietnamDate = new Intl.DateTimeFormat("en-GB", {
   year: "numeric",
 }).format(new Date());
 
+const defaultTitle = "Chà Bông\nSpace";
+
+titleInput.value = defaultTitle;
 subtitleInput.value = vietnamDate;
 
 const paperTextures = [
@@ -1212,10 +1215,13 @@ function composeRecordingFrame() {
   recordCtx.shadowOffsetY = 0;
   recordCtx.fillStyle = "rgba(31, 30, 27, 0.82)";
   recordCtx.font = "24px Georgia, serif";
-  recordCtx.fillText(titleInput.value || "Untitled song", 38, 52);
+  const titleLines = (titleInput.value || defaultTitle).split("\n").slice(0, 2);
+  titleLines.forEach((line, index) => {
+    recordCtx.fillText(line, 38, 52 + index * 28);
+  });
   recordCtx.fillStyle = "rgba(31, 30, 27, 0.46)";
   recordCtx.font = "13px ui-monospace, Menlo, monospace";
-  recordCtx.fillText(subtitleInput.value || vietnamDate, 38, 78);
+  recordCtx.fillText(subtitleInput.value || vietnamDate, 38, 108);
   recordCtx.restore();
 
   if (state.cameraStream && cameraPreview.videoWidth) {
@@ -1282,7 +1288,7 @@ async function handleRecordingStop() {
   const blob = new Blob(state.recordedChunks, { type: state.recordingMimeType });
   const recording = {
     id: `recording-${createdAt}-${Math.random().toString(36).slice(2, 8)}`,
-    title: titleInput.value || "Untitled song",
+    title: titleInput.value || defaultTitle,
     subtitle: subtitleInput.value || vietnamDate,
     createdAt,
     durationMs: Math.max(0, Date.now() - createdAt),
@@ -1443,7 +1449,7 @@ async function listCloudRecordings() {
     const items = Array.isArray(result) ? result : result.recordings || [];
     return items.map((item) => ({
       id: item.id,
-      title: item.title || "Untitled song",
+      title: item.title || defaultTitle,
       subtitle: item.subtitle || "",
       createdAt: item.createdAt || Date.now(),
       durationMs: item.durationMs || 0,
@@ -1495,7 +1501,7 @@ function renderRecordingLibrary() {
     meta.className = "recording-card-meta";
     const title = document.createElement("span");
     title.className = "recording-card-title";
-    title.textContent = recording.title || "Untitled song";
+    title.textContent = recording.title || defaultTitle;
     const actions = document.createElement("div");
     actions.className = "recording-card-actions";
     const deleteButton = document.createElement("button");
